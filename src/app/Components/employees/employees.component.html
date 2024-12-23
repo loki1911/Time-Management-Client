@@ -1,0 +1,84 @@
+<div class="container">
+    <header class="header">
+      <div class="menu-icon">
+        <i class="fas fa-bars"></i>
+      </div>
+      <h1>Time Sheet Management</h1>
+      <div class="icon-button">
+        <i class="fa-solid fa-bell"></i>
+      </div>
+      <div class="profile-icon">
+        <i class="fas fa-user-circle"></i>
+      </div>
+    </header>
+  
+    <aside class="side-nav">
+      <ul>
+        <li (click)="navigatetoHome()"><i class="fas fa-home"></i> Home</li>
+        <li (click)="navigatetoMyTime()"><i class="fas fa-clock"></i> My Time</li>
+        <li (click)="navigatetoClient()"> <i class="fa-solid fa-user-group"></i> Clients</li>
+        <li (click)="navigatetoProject()"> <i class="fa-solid fa-diagram-project"></i> Projects</li>
+        <li (click)="navigatetoEmployee()"> <i class="fa-solid fa-user-nurse"></i> Employees</li>
+      </ul>
+    </aside>
+  
+    <main class="main-content">
+      <h1>Employees Data</h1>
+  
+      <div class="button-group">
+        <button class="btn btn-primary" (click)="openAddEmployeeForm()">Add Employee</button>
+        <button class="btn btn-warning" (click)="openEditEmployeeForm()">Edit Employee</button>
+      </div>
+  
+      <ag-grid-angular
+        style="width: 100%; height: 400px;"
+        class="ag-theme-alpine"
+        [rowData]="rowData"
+        [columnDefs]="columnDefs"
+        [domLayout]="'autoHeight'"
+        [rowSelection]="'multiple'"
+        [pagination]="true"
+        [paginationPageSize]="10"
+        [suppressRowClickSelection]="true"
+        (gridReady)="onGridReady($event)">
+      </ag-grid-angular>
+    </main>
+  
+    <div *ngIf="isModalVisible" class="modal-overlay">
+      <div class="modal-content">
+        <h2>{{ isEditMode ? 'Edit Employee' : 'Add Employee' }}</h2>
+        <form (ngSubmit)="onSubmitEmployeeForm()">
+          <label for="employeeId">Employee ID</label>
+          <input type="text" id="employeeId" [(ngModel)]="employeeForm.employeeId" name="employeeId" required [readonly]="isEditMode" />
+  
+          <label for="emailId">Email</label>
+          <input type="email" id="emailId" [(ngModel)]="employeeForm.emailId" name="emailId" required />
+  
+          <label for="employeeName">Employee Name</label>
+          <input type="text" id="employeeName" [(ngModel)]="employeeForm.employeeName" name="employeeName" required />
+  
+          <label for="designation">Designation</label>
+          <input type="text" id="designation" [(ngModel)]="employeeForm.designation" name="designation" required />
+  
+          <label for="department">Department</label>
+          <input type="text" id="department" [(ngModel)]="employeeForm.department" name="department" required />
+  
+          <label for="role">Role</label>
+          <input type="text" id="role" [(ngModel)]="employeeForm.role" name="role" required />
+  
+          <div class="modal-footer">
+            <button type="button" (click)="closeModal()" class="btn btn-secondary">Cancel</button>
+            <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Save Changes' : 'Add Employee' }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <footer class="footer">
+      <div class="footer-content">
+        <p>&copy; 2024 Time Sheet Management | All Rights Reserved</p>
+        <p>Contact us: <a href="mailto:support@timesheet.com">support@Dcube.com</a></p>
+      </div>
+    </footer>
+  </div>
+  

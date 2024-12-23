@@ -1,0 +1,87 @@
+<div class="container">
+    <header class="header">
+      <div class="menu-icon">
+        <i class="fas fa-bars"></i>
+      </div>
+      <h1>Time Sheet Management</h1>
+      <div class="icon-button">
+        <i class="fa-solid fa-bell"></i>
+      </div>
+      <div class="profile-icon">
+        <i class="fas fa-user-circle"></i>
+      </div>
+    </header>
+  
+    <aside class="side-nav" id="sideNav">
+      <ul>
+        <li (click)="navigatetoHome()"><i class="fas fa-home"></i> Home</li>
+        <li (click)="navigatetoMyTime()"><i class="fas fa-clock"></i> My Time</li>
+      </ul>
+    </aside>
+  
+    <div class="main-content">
+      <section id="my-time-section">
+        <h2>Log Your Time</h2>
+        <form [formGroup]="myTimeForm" >
+          <div class="form-row">
+            <div class="form-group">
+              <label for="billingType">Billing Type :</label>
+              <select formControlName="billingType">
+                <option value="" disabled selected>Select Billing Type</option>
+                <option value="Billing">Billing</option>
+                <option value="Non-Billing">Non-Billing</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="workDate">Date</label>
+              <input type="date" formControlName="workDate">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="projectName">Project Name :</label>
+              <input matInput placeholder="Search Project" formControlName="projectName" >
+               
+            </div>
+            <div class="form-group">
+              <label for="taskName">Task Name :</label>
+              <select formControlName="taskName">
+                <option value="" disabled selected>Select Task</option>
+                <option value="Task A">Task A</option>
+                <option value="Task B">Task B</option>
+              </select>
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="clientName">Client Name :</label>
+            <input type="text" formControlName="clientName" readonly placeholder="Auto-filled based on project">
+          </div>
+  
+          <div class="form-row">
+            <div class="form-group">
+              <label for="timeWorked">Time Worked (HH:MM) :</label>
+              <input type="time" formControlName="timeWorked">
+              <div *ngIf="myTimeForm.get('timeWorked')?.hasError('invalidTime')">
+                Please select time in increments of 15 minutes (e.g., 15, 30, 45, 00).
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="description">Description :</label>
+              <textarea formControlName="description" rows="3" placeholder="Enter task details"></textarea>
+            </div>
+          </div>
+  
+          <button type="submit" [disabled]="myTimeForm.invalid">Submit</button>
+        </form>
+      </section>
+    </div>
+  
+    <footer class="footer">
+      <div class="footer-content">
+        <p>&copy; 2024 Time Sheet Management | All Rights Reserved</p>
+        <p>Contact us: <a href="mailto:support@timesheet.com">support@Dcube.com</a></p>
+      </div>
+    </footer>
+  </div>
+  
