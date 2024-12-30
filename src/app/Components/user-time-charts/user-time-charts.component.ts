@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GridOptions } from 'ag-grid-community';
-import { Observable } from 'rxjs';
 import { EmployeeService } from 'src/app/Services/employee.service';
 
 @Component({
-  selector: 'app-time-charts',
-  templateUrl: './time-charts.component.html',
-  styleUrls: ['./time-charts.component.css']
+  selector: 'app-user-time-charts',
+  templateUrl: './user-time-charts.component.html',
+  styleUrls: ['./user-time-charts.component.css']
 })
-export class TimeChartsComponent implements OnInit {
-  selectedRole: any;
-  isProfileMenuOpen = false;
+export class UserTimeChartsComponent implements OnInit{
+
+isProfileMenuOpen = false;
   chartData : any[] = [];
   email : string | null = '';
   errorMessage = '';
@@ -28,7 +27,7 @@ export class TimeChartsComponent implements OnInit {
     localStorage.removeItem('email'); 
     this.router.navigate(['login']); 
   }
-
+  selectedRole: string = 'User';
   emailId: string | null = localStorage.getItem('Email');  
 
   gridOptions: GridOptions = {
@@ -58,8 +57,6 @@ export class TimeChartsComponent implements OnInit {
   constructor(private router: Router, private employeeService: EmployeeService) {}
 
   ngOnInit() {
-   var us =  localStorage.getItem('role');
-   this.selectedRole= us;
 
     if (this.emailId) {
       this.fetchTaskData(this.emailId);  
@@ -117,20 +114,10 @@ export class TimeChartsComponent implements OnInit {
     }
   }
 
-  navigatetoClient() {
-    this.router.navigate(['clients']);
-  }
-
-  navigatetoProject() {
-    this.router.navigate(['projects']);
-  }
-
-  navigatetoEmployee() {
-    this.router.navigate(['employees']);
-  }
+ 
 
   navigatetoHome() {
-    this.router.navigate(['TimeCharts']);
+    this.router.navigate(['user-timecharts']);
   }
 
   onGridReady(params: any) {
@@ -153,3 +140,4 @@ export class TimeChartsComponent implements OnInit {
     }
   }
 }
+

@@ -83,7 +83,7 @@
   .main-content {
     margin-left: 250px; 
     padding: 20px;
-    margin-top: 60px;
+    margin-top: 10px;
     flex-grow: 1;
   }
   
@@ -216,6 +216,192 @@
       flex-direction: column;
     }
   }
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    color: #2C3E50;
+    margin-bottom: 5px;
+  }
+  
+  .form-group ng-select {
+    display: block;
+    width: 100%;
+    border: 1px solid #BDC3C7;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    background-color: #f1ecec;
+    color: #2C3E50;
+  }
+  
+  .form-group ng-select:hover {
+    border-color: #1ABC9C;
+  }
+  
+  .form-group ng-select:focus {
+    outline: none;
+    border-color: #3498DB;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+  }
+  
+  .form-group ng-select .ng-select-container {
+    height: 45px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .form-group ng-select .ng-select-container .ng-value-container {
+    font-size: 14px;
+  }
+  
+  .form-group ng-select .ng-arrow {
+    color: #3498DB;
+  }
+.form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .form-group input[readonly] {
+    background-color: #f0f0f0; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px; 
+    font-size: 16px;
+    color: #555; 
+    cursor: not-allowed; 
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .form-group input[readonly]:focus {
+    border-color: #6c757d; 
+    background-color: #e9ecef; 
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.2); 
+  }
   
  
+
+  
+  
+  
+ 
+  
+ 
+  ::ng-deep .ng-select {
+    display: block;
+    width: 100%;
+    border: 1px solid #BDC3C7;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    background-color: #f1ecec;
+    color: #2C3E50;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  ::ng-deep .ng-select:hover {
+    border-color: #1ABC9C;
+  }
+  
+  ::ng-deep .ng-select:focus {
+    border-color: #3498DB;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+  }
+  
+  ::ng-deep .ng-select .ng-select-container {
+    height: 25px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+  }
+  
+  ::ng-deep .ng-select .ng-select-container .ng-value-container {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  ::ng-deep .ng-select .ng-arrow {
+    color: #3498DB;
+  }
+  
+  ::ng-deep .ng-select .ng-dropdown-panel {
+    border: 1px solid #BDC3C7;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  ::ng-deep .ng-select .ng-dropdown-panel .ng-option {
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #2C3E50;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  ::ng-deep .ng-select .ng-dropdown-panel .ng-option:hover {
+    background-color: #1ABC9C;
+    color: white;
+  }
+  
+  ::ng-deep .ng-select .ng-dropdown-panel .ng-option.disabled {
+    color: #ccc;
+    background-color: #f4f4f4;
+    cursor: not-allowed;
+  }
+  
+  ::ng-deep .ng-select.ng-select-focused .ng-select-container {
+    border-color: #3498DB;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+  }
+  
+  ::ng-deep .ng-select .ng-placeholder {
+    color: #6c757d;
+    font-style: italic;
+    font-size: 14px;
+  }
+  
+  ::ng-deep .ng-select .ng-clear-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #BDC3C7;
+    cursor: pointer;
+  }
+  
+  @media (max-width: 768px) {
+    ::ng-deep .ng-select {
+      width: 100%;
+    }
+  }
+
+  .form-group label {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+  
+  .form-group input[type="date"] {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-group input[type="date"]:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
   

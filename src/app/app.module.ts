@@ -12,6 +12,11 @@ import { ProjectComponent } from './Components/project/project.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AgGridModule } from 'ag-grid-angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { LoginComponent } from './Components/login/login.component';
+import { MSAL_INSTANCE, MsalModule, MsalService } from '@azure/msal-angular';
+import { MSALInstanceFactory } from './msal-config';
+import { UserTimeChartsComponent } from './Components/user-time-charts/user-time-charts.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +27,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     TimeChartsComponent,
     MyTimeComponent,
     ProjectComponent,
+    LoginComponent,
+    UserTimeChartsComponent,
+   
   
     
   ],
@@ -33,10 +41,18 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AgGridModule,
     HttpClientModule,
     BrowserAnimationsModule, 
+    NgSelectModule,
+    MsalModule
    
     
   ],
-  providers: [],
+  providers: [
+    {
+      provide: MSAL_INSTANCE, 
+      useFactory: MSALInstanceFactory 
+    },
+    MsalService
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {  }

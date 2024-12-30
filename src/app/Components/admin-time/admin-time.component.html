@@ -27,6 +27,7 @@
       <section id="my-time-section">
         <h2>Log Your Time</h2>
         <form [formGroup]="myTimeForm" (ngSubmit)="onSubmit()">
+            
           <div class="form-row">
             <div class="form-group">
               <label for="billingType">Billing Type :</label>
@@ -37,40 +38,48 @@
                 <option value="Non-Billing">Non-Billing</option>
               </select>
             </div>
-            <div class="form-group">
-              <label for="workDate">Date</label>
-              <input type="date" formControlName="workDate">
-            </div>
+           
+             <div class="form-group">
+                <label for="clientName">Client Name</label>
+                <input 
+                  type="text" 
+                  id="clientName" 
+                  formControlName="clientName" 
+                  class="form-control"
+                  [value]="myTimeForm.get('clientName')?.value" 
+                  readonly />
+                  
+              </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="projectName">Project Name:</label>
               <ng-select
-                [items]="projects"
-                bindLabel="name"
-                bindValue="id"
-                placeholder="Select Project"
-                formControlName="projectName"
-                (change)="setTaskNames()"
-              ></ng-select>
+                  [items]="projects"
+                  bindLabel="projectName"
+                  bindValue="projectId"
+                  formControlName="projectName"
+                  (change)="setTaskNames($event.value)">
+              </ng-select>
             </div>
-            
-            <div class="form-group">
-              <label for="taskName">Task Name:</label>
-              <ng-select
-                [items]="tasks"
-                placeholder="Select Task"
-                formControlName="taskName"
-              ></ng-select>
-            </div>
-            
-            
+              
+              <div class="form-group">
+                <label for="taskName">Task Name:</label>
+                <ng-select
+                    [items]="tasks"
+                    bindLabel="TaskName"       
+                    bindValue="TaskId"    
+                    formControlName="taskName"
+                >
+                </ng-select>
+              
+              </div>
             
           </div>
   
           <div class="form-group">
-            <label for="clientName">Client Name :</label>
-            <input type="text" formControlName="clientName" readonly placeholder="Auto-filled based on project">
+            <label for="workDate">Date</label>
+            <input type="date" formControlName="workDate">
           </div>
   
           <div class="form-row">
@@ -100,3 +109,4 @@
     </footer>
   </div>
   
+

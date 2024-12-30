@@ -1,34 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GridOptions } from 'ag-grid-community';
+import { TimeSubmitingService } from 'src/app/Services/timesubmitting.service';
 
 @Component({
   selector: 'app-client',
   templateUrl: './client.component.html',
   styleUrls: ['./client.component.css']
 })
-export class ClientComponent {
-  constructor(private router: Router) {}
+export class ClientComponent implements OnInit {
+  constructor(private router: Router, private timeEntryService: TimeSubmitingService) {}
 
-  navigatetoMyTime() {
-    this.router.navigate(['my-time']);
-  }
-
-  navigatetoHome() {
-    this.router.navigate(['TimeCharts']);
-  }
-
-  navigatetoClient() {
-    this.router.navigate(['clients']);
-  }
-
-  navigatetoProject() {
-    this.router.navigate(['projects']);
-  }
-
-  navigatetoEmployee() {
-    this.router.navigate(['employees']);
-  }
+  rowData: any[] = [];
+  isModalVisible = false;
+  isEditMode = false; 
+  clientForm = { clientId: '', clientName: '' };
 
   gridOptions: GridOptions = {
     pagination: true,
@@ -47,16 +33,39 @@ export class ClientComponent {
     { headerName: 'Client Name', field: 'clientName', sortable: true, filter: true },
   ];
 
-  rowData = [
-    { clientId: '1', clientName: 'BHP' },
-    { clientId: '2', clientName: 'Albemarle' },
-    { clientId: '3', clientName: 'Bosch' },
-    { clientId: '4', clientName: 'Nokia' },
-  ];
+  ngOnInit(): void {
+    this.ClientsData();
+  }
 
-  isModalVisible = false;
-  isEditMode = false; 
-  clientForm = { clientId: '', clientName: '' };
+  ClientsData() {
+    this.timeEntryService.getClientData().subscribe((data: any[]) => {
+      this.rowData = data;
+      console.log(this.rowData);
+      if (this.gridOptions.api) {
+        this.gridOptions.api.setRowData(this.rowData);
+      }
+    });
+  }
+
+  navigatetoMyTime() {
+    this.router.navigate(['admin']);
+  }
+
+  navigatetoHome() {
+    this.router.navigate(['TimeCharts']);
+  }
+
+  navigatetoClient() {
+    this.router.navigate(['clients']);
+  }
+
+  navigatetoProject() {
+    this.router.navigate(['projects']);
+  }
+
+  navigatetoEmployee() {
+    this.router.navigate(['employees']);
+  }
 
   onGridReady(params: any) {
     this.gridOptions.api = params.api;
@@ -76,14 +85,14 @@ export class ClientComponent {
   openEditClientForm() {
     if (this.gridOptions.api) {
       const selectedNodes = this.gridOptions.api.getSelectedNodes();
-      setTimeout(() => {
-        document.querySelector('.modal-overlay')?.classList.add('open');
-      }, 10);
       if (selectedNodes.length > 0) {
         const selectedNode = selectedNodes[0];
         this.clientForm = { ...selectedNode.data }; 
         this.isEditMode = true;
         this.isModalVisible = true;
+        setTimeout(() => {
+          document.querySelector('.modal-overlay')?.classList.add('open');
+        }, 10);
       } else {
         alert('Please select a client to edit');
       }
@@ -91,24 +100,45 @@ export class ClientComponent {
   }
 
   onSubmitClientForm() {
-    if (this.gridOptions.api) {
-      const selectedNodes = this.gridOptions.api.getSelectedNodes();
-      if (this.isEditMode && selectedNodes.length > 0) {
-        const selectedNode = selectedNodes[0];
-        selectedNode.setData(this.clientForm); 
-      } else if (!this.isEditMode) {
-        this.rowData.push(this.clientForm);
-        this.gridOptions.api.setRowData(this.rowData);
-      }
+    if (this.isEditMode) {
+      this.timeEntryService.updateClient(this.clientForm.clientId, this.clientForm.clientName).subscribe(
+        (response) => {
+          console.log('Client updated successfully:', response);
+          if (this.gridOptions.api) {
+            const selectedNodes = this.gridOptions.api.getSelectedNodes();
+            if (selectedNodes.length > 0) {
+              const selectedNode = selectedNodes[0];
+              selectedNode.setData(this.clientForm);
+            }
+          }
+          this.closeModal();
+        },
+        (error) => {
+          console.error('Error updating client:', error);
+        }
+      );
+    } else {
+      this.timeEntryService.addClient(this.clientForm.clientName).subscribe(
+        (response) => {
+          console.log('Client added successfully:', response);
+          const newClient = { clientId: response.clientId, clientName: response.clientName }; 
+          this.rowData.push(newClient);
+          if (this.gridOptions.api) {
+            this.gridOptions.api.setRowData(this.rowData);
+          }
+          this.closeModal();
+        },
+        (error) => {
+          console.error('Error adding client:', error);
+        }
+      );
     }
-
-    this.closeModal(); 
   }
 
   closeModal() {
     document.querySelector('.modal-overlay')?.classList.remove('open');
-  setTimeout(() => {
-    this.isModalVisible = false;
-  }, 300);
+    setTimeout(() => {
+      this.isModalVisible = false;
+    }, 300);
   }
 }

@@ -23,32 +23,15 @@
             <li (click)="navigatetoHome()">
                 <i class="fas fa-home"></i> Home
             </li>
-            <li *ngIf="selectedRole === 'User' || selectedRole === 'Admin'" (click)="navigatetoMyTime()">
+            <li (click)="navigatetoMyTime()">
                 <i class="fas fa-clock"></i> My Time
             </li>
-            <li *ngIf="selectedRole === 'Admin'" (click)="navigatetoClient()">
-                <i class="fa-solid fa-user-group"></i> Clients
-            </li>
-            <li *ngIf="selectedRole === 'Admin'" (click)="navigatetoProject()">
-                <i class="fa-solid fa-diagram-project"></i> Projects
-            </li>
-            <li *ngIf="selectedRole === 'Admin'" (click)="navigatetoEmployee()">
-                <i class="fa-solid fa-user-nurse"></i> Employees
-            </li>
+            
         </ul>
     </aside>
 
     <main class="main-content">
-        <div class="role-selector-container">
-            <div class="role-selector">
-                <label for="role" class="role-label">Role:</label>
-                <select id="role" class="role-dropdown" [(ngModel)]="selectedRole">
-                    <option value="User">User</option>
-                    <option value="Admin">Admin</option>
-                </select>
-            </div>
-           
-        </div>
+       
         <div class="chart-container">
             <div class="chart-bar"
                  *ngFor="let data of chartData"

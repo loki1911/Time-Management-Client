@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Client, Project, Task, TimeSubmitingService } from 'src/app/Services/timesubmitting.service';
 
 @Component({
   selector: 'app-my-time',
@@ -8,86 +9,136 @@ import { Router } from '@angular/router';
   styleUrls: ['./my-time.component.css']
 })
 export class MyTimeComponent implements OnInit {
-  myTimeForm: FormGroup;
-  sideNavOpen = false;
+ myTimeForm: FormGroup;
+  projects: Project[] = [];
+  tasks: Task[] = [];
+  client: Client | null = null;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private timeEntryService: TimeSubmitingService
   ) {
     this.myTimeForm = this.fb.group({
       projectName: ['', Validators.required],
-      taskName: ['', Validators.required],
       clientName: [{ value: '', disabled: true }],
+      taskName: ['', Validators.required],
       billingType: ['', Validators.required],
       workDate: ['', Validators.required],
-      timeWorked: ['', Validators.required],
-      description: ['', Validators.required]
+      timeWorked: ['', [Validators.required]],
+      description: ['', Validators.required],
+      clientId: Number,
+
     });
   }
 
   ngOnInit(): void {
+    this.loadProjects();
+
+    this.myTimeForm.get('projectName')?.valueChanges.subscribe((selectedProjectId) => {
+      this.setTaskNames(selectedProjectId);
+      this.onProjectSelect(selectedProjectId);
+    });
+  }
+  getBills(projectId: string){
+   if(projectId){
+    this.timeEntryService.GetBillTypesByProjectId(projectId).subscribe()
+   }
+
   }
 
-  toggleSideNav() {
-    this.sideNavOpen = !this.sideNavOpen;
-    const sideNav = document.getElementById('sideNav');
-    const mainContent = document.querySelector('.main-content');
-    
-    if (this.sideNavOpen) {
-      sideNav?.classList.add('open');
-      mainContent?.classList.add('shifted');
-    } else {
-      sideNav?.classList.remove('open');
-      mainContent?.classList.remove('shifted');
+  
+
+  loadProjects(): void {
+    this.timeEntryService.getProjects().subscribe({
+      next: (data: Project[]) => {
+        this.projects = data;
+        console.log('Projects loaded:', data);
+      },
+      error: (error) => {
+        console.error('Error fetching projects:', error);
+      },
+    });
+  }
+
+  onProjectSelect(projectId: string): void {
+    if (projectId) {
+      this.timeEntryService.getClientByProjectId(projectId).subscribe({
+        next: (clientData: Client) => {
+          this.client = clientData;
+          console.log('Client data:', this.client);
+
+          this.myTimeForm.patchValue({
+            clientName: clientData.clientName,
+            clientId : clientData.clientId
+          });
+        },
+        error: (error) => {
+          console.error('Error fetching client data:', error);
+        },
+      });
     }
   }
 
-  navigatetoMyTime() {
-    this.router.navigate(['my-time']);
-    console.log('Navigated to My Time');
+  setTaskNames(selectedProjectId: any): void {
+    const projectId = selectedProjectId ? String(selectedProjectId) : '';
+    console.log(projectId);
+
+    if (projectId) {
+      this.timeEntryService.getTasksByProjectId(projectId).subscribe({
+        next: (data: Task[]) => {
+          console.log('Fetched tasks:', data);
+          this.tasks = data;
+        },
+        error: (error) => {
+          console.error('Error fetching tasks:', error);
+          this.tasks = [];
+        },
+      });
+    } else {
+      this.tasks = [];
+      this.myTimeForm.get('taskName')?.reset();
+    }
   }
 
-  navigatetoHome(){
+  onSubmit(): void {
+    if (this.myTimeForm.valid) {
+      const formData = this.myTimeForm.getRawValue();
+  console.log(formData);
+  
+  
+      this.timeEntryService.submitFormData(formData).subscribe({
+        next: (response) => {
+          console.log('Data submitted successfully:', response);
+  
+          this.myTimeForm.reset();
+          this.myTimeForm.get('clientName')?.setValue('');
+        },
+        error: (error) => {
+          console.error('Error submitting form:', error);
+        },
+      });
+    }
+  }
+  
+
+  navigatetoMyTime(): void {
+    this.router.navigate(['my-time']);
+  }
+
+  navigatetoHome(): void {
     this.router.navigate(['TimeCharts']);
   }
 
-  // Method to set client name dynamically based on project selection
-  // setClientName() {
-  //   const projectName = this.myTimeForm.get('projectName')?.value;
+  navigatetoClient(): void {
+    this.router.navigate(['clients']);
+  }
 
-  //   if (projectName) {
-  //     this.timeEntryService.getClientName(projectName).subscribe(
-  //       (response) => {
-  //         if (response && response.clientName) {
-  //           this.myTimeForm.get('clientName')?.setValue(response.clientName);
-  //         } else {
-  //           console.log('Client not found');
-  //         }
-  //       },
-  //       (error) => {
-  //         console.error('Error fetching client name:', error);
-  //       }
-  //     );
-  //   }
-  // }
+  navigatetoProject(): void {
+    this.router.navigate(['projects']);
+  }
 
-  // Submit form data to the backend
-  // onSubmit() {
-  //   if (this.myTimeForm.valid) {
-  //     console.log('Form submitted:', this.myTimeForm.value);
-
-  //     // Send form data to backend
-  //     this.timeEntryService.submitFormData(this.myTimeForm.value).subscribe(
-  //       (response) => {
-  //         console.log('Data submitted successfully:', response);
-  //       },
-  //       (error) => {
-  //         console.error('Error submitting form:', error);
-  //       }
-  //     );
-  //   } else {
-  //     console.log('Form is invalid');
-  //   }
-  // }
+  navigatetoEmployee(): void {
+    this.router.navigate(['employees']);
+  }
 }
